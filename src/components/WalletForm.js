@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Input from './Input';
 import Select from './Select';
-import { fetchCurrencies } from '../redux/actions/walletActions';
+import { fetchCurrencies, testAction } from '../redux/actions/walletActions';
 
 const CATEGORIAS = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
 const METODO_PAGAMENTO = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
@@ -12,11 +12,13 @@ class WalletForm extends React.Component {
   constructor() {
     super();
     this.state = {
-      valorDaDespesa: '',
-      descricao: '',
-      moeda: '',
-      metodoDePagamento: '',
-      categoria: '',
+      id: 0,
+      value: '',
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: CATEGORIAS[0],
+      exchangeRates: {},
     };
   }
 
@@ -25,21 +27,36 @@ class WalletForm extends React.Component {
     dispatch(fetchCurrencies());
   }
 
-  // fetchCurrencies = async () => {
-  //   const response = await fetch('https://economia.awesomeapi.com.br/json/all');
-  //   const data = await response.json();
-  //   const currArray = Object.keys(data);
-  //   const result = currArray.filter((curr) => curr !== 'USDT');
-  //   return result;
-  // };
+  fetchExchangeRate = async () => {
+    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const data = await response.json();
+    return data;
+  };
 
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
   };
 
+  handleClick = async () => {
+    const { dispatch } = this.props;
+    this.setState({
+      exchangeRates: await this.fetchExchangeRate(),
+    }, () => {
+      dispatch(testAction(this.state));
+      this.setState((prevState) => ({
+        id: prevState.id + 1,
+        value: '',
+        description: '',
+        currency: 'USD',
+        method: 'Dinheiro',
+        tag: 'Alimentação',
+      }));
+    });
+  };
+
   render() {
-    const { valorDaDespesa, descricao, moeda, metodoDePagamento, categoria } = this.state;
+    const { value, description, currency, method, tag } = this.state;
     const { currencies } = this.props;
     return (
       <div>
@@ -48,8 +65,8 @@ class WalletForm extends React.Component {
           label="Descrição da despesa"
           type="text"
           onChange={ this.handleChange }
-          name="descricao"
-          value={ descricao }
+          name="description"
+          value={ description }
         />
         <Select
           datatestid="tag-input"
@@ -57,9 +74,9 @@ class WalletForm extends React.Component {
           defaultOption="Selecione"
           defaultValue="Selecione"
           onChange={ this.handleChange }
-          value={ categoria }
-          id="categoria"
-          name="categoria"
+          value={ tag }
+          id="tag"
+          name="tag"
           options={ CATEGORIAS }
         />
         <Input
@@ -67,8 +84,8 @@ class WalletForm extends React.Component {
           label="Valor"
           type="number"
           onChange={ this.handleChange }
-          name="valorDaDespesa"
-          value={ valorDaDespesa }
+          name="value"
+          value={ value }
         />
         <Select
           datatestid="method-input"
@@ -76,22 +93,29 @@ class WalletForm extends React.Component {
           defaultOption="Selecione"
           defaultValue="Selecione"
           onChange={ this.handleChange }
-          value={ metodoDePagamento }
-          id="metodoDePagamento"
-          name="metodoDePagamento"
+          value={ method }
+          id="method"
+          name="method"
           options={ METODO_PAGAMENTO }
         />
         <Select
           datatestid="currency-input"
-          label="Moeda"
+          label="currency"
           defaultOption="Selecione"
           defaultValue="Selecione"
           onChange={ this.handleChange }
-          value={ moeda }
-          id="moeda"
-          name="moeda"
+          value={ currency }
+          id="currency"
+          name="currency"
           options={ currencies }
         />
+        <button
+          type="button"
+          onClick={ this.handleClick }
+        >
+          Adicionar Despesa
+
+        </button>
 
       </div>
     );

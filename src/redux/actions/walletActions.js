@@ -1,6 +1,7 @@
 export const REQUEST_CURRENCY = 'REQUEST_CURRENCY';
 export const REQUEST_CURRENCY_SUCESS = 'REQUEST_CURRENCY_SUCESS';
 export const REQUEST_CURRENCY_ERRO = 'REQUEST_CURRENCY_ERROR';
+export const ADD_EXPENSES = 'ADD_EXPENSES';
 
 export const requestCurr = () => ({
   type: REQUEST_CURRENCY,
@@ -11,6 +12,15 @@ export const responseCurrSucess = (curr) => ({
   payload: curr,
 });
 
+export const addExpense = (expenses) => ({
+  type: ADD_EXPENSES,
+  payload: expenses,
+});
+
+export const testAction = (tey) => ({
+  type: 'TEST',
+  payload: tey,
+});
 // export const fetchCurrencies = async () => {
 //   dispatch(requestCurr());
 //   const response = await fetch('https://economia.awesomeapi.com.br/json/all');

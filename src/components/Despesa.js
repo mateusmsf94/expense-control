@@ -1,7 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { removeById } from '../redux/actions/walletActions';
 
 class Despesa extends React.Component {
+  handleClickDelete = () => {
+    const { dispatch, expense: { id } } = this.props;
+    dispatch(removeById(id));
+  };
+
   render() {
     const {
       expense: { description, method, tag, value, currency, exchangeRates },
@@ -18,10 +25,13 @@ class Despesa extends React.Component {
         <td>{parseFloat(value * ask).toFixed(2)}</td>
         <td>Real</td>
         <td>
-          <button type="button">Editar</button>
-        </td>
-        <td>
-          <button type="button">Excluir</button>
+          <button
+            type="button"
+            data-testid="delete-btn"
+            onClick={ this.handleClickDelete }
+          >
+            Excluir
+          </button>
         </td>
       </tr>
     );
@@ -38,7 +48,7 @@ Despesa.propTypes = {
     currency: PropTypes.string,
     exchangeRates: PropTypes.shape([]),
   }).isRequired,
-
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Despesa;
+export default connect()(Despesa);

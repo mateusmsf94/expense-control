@@ -1,5 +1,6 @@
 import {
   ADD_EXPENSES,
+  REMOVE_BY_ID,
   REQUEST_CURRENCY,
   REQUEST_CURRENCY_SUCESS,
 } from '../actions/walletActions';
@@ -40,6 +41,12 @@ function wallet(state = INITIAL_STATE, action) {
     return {
       ...state,
       expenses: [...state.expenses, action.payload],
+    };
+  }
+  case REMOVE_BY_ID: {
+    return {
+      ...state,
+      expenses: state.expenses.filter((despesa) => despesa.id !== action.payload),
     };
   }
   default:

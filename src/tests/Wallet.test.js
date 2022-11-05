@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Wallet from '../pages/Wallet';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 
@@ -23,5 +24,18 @@ describe('<Wallet/>', () => {
     expect(moeda).toBeInTheDocument();
     const btnAdicionarDespesa = screen.getByRole('button', { name: /Adicionar Despesa/ });
     expect(btnAdicionarDespesa).toBeInTheDocument();
+  });
+
+  test('se total muda ao adicionar despesas', async () => {
+    renderWithRouterAndRedux(<Wallet />);
+
+    userEvent.type(screen.getByLabelText(/Valor/), '20');
+    userEvent.type(screen.getByLabelText(/Descrição da despesa/), 'lanche');
+    userEvent.click(screen.getByRole('button', { name: /Adicionar Despesa/ }));
+
+    const descricao = await screen.findByText('lanche');
+    const valor = await screen.findByText('20.00');
+    expect(descricao).toBeInTheDocument();
+    expect(valor).toBeInTheDocument();
   });
 });

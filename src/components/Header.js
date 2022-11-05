@@ -19,7 +19,7 @@ class Header extends Component {
       <div>
         <img src={ WalletLogo } alt="wallet logo" />
         <span data-testid="total-field">
-          {expenses.length === 0 ? 0 : this.totalExpenses()}
+          {expenses.length === 0 ? '0.00' : this.totalExpenses()}
         </span>
         <span data-testid="header-currency-field">BRL</span>
         <span data-testid="email-field">{email}</span>

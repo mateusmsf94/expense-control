@@ -2,6 +2,7 @@ export const REQUEST_CURRENCY = 'REQUEST_CURRENCY';
 export const REQUEST_CURRENCY_SUCESS = 'REQUEST_CURRENCY_SUCESS';
 export const REQUEST_CURRENCY_ERRO = 'REQUEST_CURRENCY_ERROR';
 export const ADD_EXPENSES = 'ADD_EXPENSES';
+export const REMOVE_BY_ID = 'REMOVE_BY_ID';
 
 export const requestCurr = () => ({
   type: REQUEST_CURRENCY,
@@ -29,6 +30,11 @@ export const testAction = (tey) => ({
 //   const result = currArray.filter((curr) => curr !== 'USDT');
 //   return result;
 // };
+
+export const removeById = (id) => ({
+  type: REMOVE_BY_ID,
+  payload: id,
+});
 
 export function fetchCurrencies() {
   return async (dispatch) => {
